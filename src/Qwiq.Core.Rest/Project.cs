@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
+using Microsoft.VisualStudio.Services.WebApi;
 
 namespace Microsoft.Qwiq.Client.Rest
 {

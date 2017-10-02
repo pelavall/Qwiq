@@ -11,6 +11,8 @@ namespace Microsoft.Qwiq
 
         private readonly Lazy<IWorkItemTypeCollection> _wits;
 
+        private readonly Lazy<IQueryFolderCollection> _queryHierarchy;
+
         internal Project(
             Guid guid,
             string name,
@@ -31,12 +33,6 @@ namespace Microsoft.Qwiq
         {
         }
 
-        public bool Equals(IProject other)
-        {
-            return ProjectComparer.Default.Equals(this, other);
-        }
-
-        public IWorkItemClassificationNodeCollection<int> AreaRootNodes => _area.Value;
 
         public Guid Guid { get; }
 
@@ -48,9 +44,16 @@ namespace Microsoft.Qwiq
 
         public IWorkItemTypeCollection WorkItemTypes => _wits.Value;
 
+        public IQueryFolderCollection QueryHierarchy => _queryHierarchy.Value;
+
         public override bool Equals(object obj)
         {
             return ProjectComparer.Default.Equals(this, obj as IProject);
+        }
+
+        public bool Equals(IProject other)
+        {
+            return ProjectComparer.Default.Equals(this, other);
         }
 
         public override int GetHashCode()
