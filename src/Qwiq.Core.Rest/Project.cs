@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+(??)using System.Linq;
 using JetBrains.Annotations;
 
 using Microsoft.TeamFoundation.Core.WebApi;
@@ -10,6 +11,9 @@ namespace Microsoft.Qwiq.Client.Rest
 {
     internal class Project : Qwiq.Project
     {
+        //The VSTS Rest api for shared queries only allows for expanding folder structure 2 deep, https://www.visualstudio.com/en-us/docs/integrate/api/wit/queries
+        private const int MaxQueryFolderExpansionDepth = 2;
+
         internal Project([NotNull] TeamProjectReference project, [NotNull] WorkItemStore store)
             : base(
                 project.Id,
