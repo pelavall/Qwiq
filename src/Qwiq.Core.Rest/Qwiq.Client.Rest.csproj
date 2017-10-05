@@ -92,6 +92,7 @@
     <Compile Include="QueryDefinition.cs" />
     <Compile Include="QueryFactory.cs" />
     <Compile Include="QueryFolder.cs" />
+    <Compile Include="QueryHiearchyItemRepository.cs" />
     <Compile Include="TeamFoundationIdentity.cs" />
     <Compile Include="TfsConnectionFactory.cs" />
     <Compile Include="VssConnectionAdapter.cs" />
