@@ -3,28 +3,28 @@ using JetBrains.Annotations;
 
 namespace Microsoft.Qwiq
 {
-    internal class QueryDefinitionComparer : GenericComparer<IQueryDefinition>
+    internal class AreaOrIterationComparer : GenericComparer<IAreaOrIteration>
     {
-        internal new static readonly QueryDefinitionComparer Default = Nested.Instance;
+        internal new static readonly AreaOrIterationComparer Default = Nested.Instance;
 
-        private QueryDefinitionComparer()
+        private AreaOrIterationComparer()
         {
         }
 
-        public override bool Equals(IQueryDefinition x, IQueryDefinition y)
+        public override bool Equals(IAreaOrIteration x, IAreaOrIteration y)
         {
             if (ReferenceEquals(x, y)) return true;
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
 
-            var res = x.Id == y.Id
-                    && string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(x.Path, y.Path, StringComparison.OrdinalIgnoreCase);
-
-            return res;
+            return x.Id == y.Id
+                   && x.IsAreaNode == y.IsAreaNode
+                   && x.IsIterationNode == y.IsIterationNode
+                   && string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase)
+                   && string.Equals(x.Path, y.Path, StringComparison.OrdinalIgnoreCase);
         }
 
-        public override int GetHashCode([CanBeNull] IQueryDefinition obj)
+        public override int GetHashCode([CanBeNull] IAreaOrIteration obj)
         {
             if (ReferenceEquals(obj, null)) return 0;
 
@@ -32,7 +32,9 @@ namespace Microsoft.Qwiq
             {
                 var hash = 27;
 
-                hash = (hash * 13) ^ obj.Id.GetHashCode();
+                hash = (hash * 13) ^ obj.Id;
+                hash = (hash * 13) ^ obj.IsAreaNode.GetHashCode();
+                hash = (hash * 13) ^ obj.IsIterationNode.GetHashCode();
                 hash = (hash * 13) ^ (obj.Name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Name) : 0);
                 hash = (hash * 13) ^ (obj.Path != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Path) : 0);
 
@@ -43,7 +45,7 @@ namespace Microsoft.Qwiq
         private class Nested
         {
             // ReSharper disable MemberHidesStaticFromOuterClass
-            internal static readonly QueryDefinitionComparer Instance = new QueryDefinitionComparer();
+            internal static readonly AreaOrIterationComparer Instance = new AreaOrIterationComparer();
 
             // ReSharper restore MemberHidesStaticFromOuterClass
 
