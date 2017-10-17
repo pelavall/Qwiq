@@ -11,7 +11,7 @@ namespace Microsoft.Qwiq
 
         private readonly Lazy<IWorkItemTypeCollection> _wits;
 
-        private readonly Lazy<IQueryFolderCollection> _queryHierarchy;
+        private readonly Lazy<INodeCollection<IQueryFolder, Guid>> _queryFolders;
 
         internal Project(
             Guid guid,
@@ -44,7 +44,7 @@ namespace Microsoft.Qwiq
 
         public IWorkItemTypeCollection WorkItemTypes => _wits.Value;
 
-        public IQueryFolderCollection QueryHierarchy => _queryHierarchy.Value;
+        public INodeCollection<IQueryFolder, Guid> QueryFolders => _queryFolders.Value;
 
         public override bool Equals(object obj)
         {
