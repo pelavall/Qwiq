@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Microsoft.Qwiq
 {
-    internal class AreaOrIterationComparer : GenericComparer<IAreaOrIteration>
+    internal class AreaOrIterationComparer : GenericComparer<IWorkItemClassificationNode>
     {
         internal new static readonly AreaOrIterationComparer Default = Nested.Instance;
 
@@ -11,7 +11,7 @@ namespace Microsoft.Qwiq
         {
         }
 
-        public override bool Equals(IAreaOrIteration x, IAreaOrIteration y)
+        public override bool Equals(IWorkItemClassificationNode x, IWorkItemClassificationNode y)
         {
             if (ReferenceEquals(x, y)) return true;
             if (ReferenceEquals(x, null)) return false;
@@ -24,7 +24,7 @@ namespace Microsoft.Qwiq
                    && string.Equals(x.Path, y.Path, StringComparison.OrdinalIgnoreCase);
         }
 
-        public override int GetHashCode([CanBeNull] IAreaOrIteration obj)
+        public override int GetHashCode([CanBeNull] IWorkItemClassificationNode obj)
         {
             if (ReferenceEquals(obj, null)) return 0;
 

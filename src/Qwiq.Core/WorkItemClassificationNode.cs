@@ -1,53 +1,68 @@
-﻿using System;
+using System;
 using System.Diagnostics;
-using JetBrains.Annotations;
 
 namespace Microsoft.Qwiq
 {
-
-    public class WorkItemClassificationNode<TId> : IWorkItemClassificationNode<TId>, IEquatable<IWorkItemClassificationNode<TId>>
+    public class WorkItemClassificationNode : IWorkItemClassificationNode
     {
-        
+        private readonly Lazy<string> _path;
 
-        public WorkItemClassificationNode(TId id, NodeType nodeType, [NotNull] string name, Uri uri)
+        public WorkItemClassificationNode(
+            int id,
+            WorkItemClassificationNodeType type,
+            string name,
+            Uri uri,
+            Lazy<INode<IWorkItemClassificationNode, int>> lazyParent = null
+            )
+        : this(id, type == WorkItemClassificationNodeType.Area, type == WorkItemClassificationNodeType.Iteration, name, uri, lazyParent)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
-
-
-            Name = name;
-            Uri = uri;
-            Id = id;
-            Type = nodeType;
         }
 
-        public TId Id { get; }
-        public Uri Uri { get; }
-        public NodeType Type { get; }
+        public WorkItemClassificationNode(
+            int id,
+            bool isAreaNode,
+            bool isIterationNode,
+            string name,
+            Uri uri,
+            Lazy<INode<IWorkItemClassificationNode, int>> lazyParent = null)
+        {
+            Id = id;
+            IsAreaNode = isAreaNode;
+            IsIterationNode = isIterationNode;
+            Uri = uri;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            _path = new Lazy<string>(() => ((lazyParent?.Value?.Value?.Path ?? string.Empty) + "\\" + Name).Trim('\\'));
+        }
+
+        public int Id { get; }
+        public bool IsAreaNode { get; }
+        public bool IsIterationNode { get; }
         public string Name { get; }
+        public Uri Uri { get; }
+        public virtual string Path => _path.Value;
 
         [DebuggerStepThrough]
-        public bool Equals(IWorkItemClassificationNode<TId> other)
+        public bool Equals(IWorkItemClassificationNode other)
         {
-            return WorkItemClassificationNodeComparer<TId>.Default.Equals(this, other);
+            return AreaOrIterationComparer.Default.Equals(this, other);
         }
 
         [DebuggerStepThrough]
         public override bool Equals(object obj)
         {
-            return WorkItemClassificationNodeComparer<TId>.Default.Equals(this, obj as IWorkItemClassificationNode<TId>);
+            return AreaOrIterationComparer.Default.Equals(this, obj as IWorkItemClassificationNode);
         }
 
         [DebuggerStepThrough]
         public override int GetHashCode()
         {
-            return WorkItemClassificationNodeComparer<TId>.Default.GetHashCode(this);
+            return AreaOrIterationComparer.Default.GetHashCode(this);
         }
 
         [DebuggerStepThrough]
         public override string ToString()
         {
-            return Name;
+            return Path;
         }
     }
 }

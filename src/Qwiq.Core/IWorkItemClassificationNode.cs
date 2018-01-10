@@ -1,7 +1,13 @@
-﻿namespace Microsoft.Qwiq
+using System;
+
+namespace Microsoft.Qwiq
 {
-    public interface IWorkItemClassificationNode<out TId> : IIdentifiable<TId>, IResourceReference, INamed
+    public interface IWorkItemClassificationNode : IEquatable<IWorkItemClassificationNode>, IIdentifiable<int>
     {
-        NodeType Type { get; }
+        bool IsAreaNode { get; }
+        bool IsIterationNode { get; }
+        string Name { get; }
+        Uri Uri { get; }
+        string Path { get; }
     }
 }
