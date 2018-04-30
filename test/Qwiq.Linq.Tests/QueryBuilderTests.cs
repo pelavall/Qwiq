@@ -12,6 +12,60 @@ namespace Qwiq.Linq
 {
     [TestClass]
     // ReSharper disable once InconsistentNaming
+    public class when_a_query_has_a_cast_in_it : WiqlQueryBuilderContextSpecification
+    {
+        private DateTime _date;
+
+        public override void Given()
+        {
+            base.Given();
+            _date = DateTime.SpecifyKind(new DateTime(2012, 11, 29, 17, 0, 0), DateTimeKind.Utc);
+        }
+
+        public override void When()
+        {
+            base.When();
+            Expected =
+                "SELECT * FROM WorkItems WHERE (([Changed Date] > '2012-11-29 17:00:00Z'))";
+            Actual = Query.Where(item => (DateTime)item["Changed Date"] > _date).ToString();
+        }
+
+        [TestMethod]
+        public void it_is_translated_to_a_where()
+        {
+            Actual.ShouldEqual(Expected);
+        }
+    }
+
+    [TestClass]
+    // ReSharper disable once InconsistentNaming
+    public class when_a_query_has_an_as_operator_in_it : WiqlQueryBuilderContextSpecification
+    {
+        private DateTime _date;
+
+        public override void Given()
+        {
+            base.Given();
+            _date = DateTime.SpecifyKind(new DateTime(2012, 11, 29, 17, 0, 0), DateTimeKind.Utc);
+        }
+
+        public override void When()
+        {
+            base.When();
+            Expected =
+                "SELECT * FROM WorkItems WHERE (([Changed Date] > '2012-11-29 17:00:00Z'))";
+            Actual = Query.Where(item => (item["Changed Date"] as DateTime?) > _date).ToString();
+        }
+
+        [TestMethod]
+        public void it_is_translated_to_a_where()
+        {
+            Actual.ShouldEqual(Expected);
+        }
+    }
+
+    [TestClass]
+    // ReSharper disable once InconsistentNaming
     public class when_a_query_has_a_where_clause_with_an_and_expression : WiqlQueryBuilderContextSpecification
     {
         private DateTime _date;
